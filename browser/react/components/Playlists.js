@@ -37,6 +37,7 @@ class Playlists extends React.Component {
 	}
 
 	handleChange (evt) {
+		// Setting state is an asynchonous function and therefore we should set the function that we need to run to a variable and set the state on the variable.
 		const value = evt.target.value;
 		const validate = this.validate(value);
 		const warningText = this.warningText(value)
