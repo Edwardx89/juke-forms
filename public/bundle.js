@@ -19112,7 +19112,7 @@
 /* 152 */
 /***/ function(module, exports) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -19138,7 +19138,7 @@
 	 * @return {?DOMElement}
 	 */
 	function getActiveElement(doc) /*?DOMElement*/{
-	  doc = doc || (typeof document !== 'undefined' ? document : undefined);
+	  doc = doc || global.document;
 	  if (typeof doc === 'undefined') {
 	    return null;
 	  }
@@ -19150,6 +19150,7 @@
 	}
 	
 	module.exports = getActiveElement;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 153 */
@@ -29049,8 +29050,11 @@
 						null,
 						'New Playlist'
 					),
-					console.log(props),
-					props.showWarning,
+					props.inputIsInvalid ? _react2.default.createElement(
+						'div',
+						{ className: 'alert alert-warning' },
+						props.warningText
+					) : null,
 					_react2.default.createElement(
 						'div',
 						{ className: 'form-group' },
@@ -29073,7 +29077,7 @@
 							{ className: 'col-xs-10 col-xs-offset-2' },
 							_react2.default.createElement(
 								'button',
-								{ disabled: props.inputIsValid, type: 'submit', className: 'btn btn-success' },
+								{ disabled: props.inputIsInvalid, type: 'submit', className: 'btn btn-success' },
 								'Create Playlist'
 							)
 						)
@@ -29125,33 +29129,47 @@
 	
 			_this.state = {
 				inputValue: '',
-				inputIsValid: true,
-				showWarning: ''
+				inputIsInvalid: true,
+				warningText: ''
 			};
 			_this.handleChange = _this.handleChange.bind(_this);
 			_this.handleSubmit = _this.handleSubmit.bind(_this);
 			_this.validate = _this.validate.bind(_this);
-			_this.warning = _this.warning.bind(_this);
+			_this.warningText = _this.warningText.bind(_this);
 			return _this;
 		}
 	
 		_createClass(Playlists, [{
 			key: 'validate',
-			value: function validate() {
-				if (!this.state.inputValue || this.state.inputValue.length > 16) {
+			value: function validate(value) {
+				console.log(value);
+				if (value.length > 16 || value === "" || value.length === 0) {
 					return true;
 				} else {
 					return false;
 				}
 			}
 		}, {
+			key: 'warningText',
+			value: function warningText(value) {
+				if (this.validate(value)) {
+					if (value.length === 0 || value.length === undefined) {
+						return "Please enter a name.";
+					} else {
+						return 'Too many characters. Please shorten input.';
+					}
+				}
+			}
+		}, {
 			key: 'handleChange',
 			value: function handleChange(evt) {
 				var value = evt.target.value;
+				var validate = this.validate(value);
+				var warningText = this.warningText(value);
 				this.setState({
 					inputValue: value,
-					inputIsValid: this.validate(),
-					showWarning: this.warning()
+					inputIsInvalid: validate,
+					warningText: warningText
 				});
 			}
 		}, {
@@ -29159,26 +29177,9 @@
 			value: function handleSubmit(evt) {
 				this.setState({
 					inputValue: '',
-					inputIsValid: true
+					inputIsInvalid: true
 				});
 				evt.preventDefault();
-			}
-		}, {
-			key: 'warning',
-			value: function warning() {
-				if (!this.state.inputValue) {
-					return _react2.default.createElement(
-						'div',
-						{ className: 'alert alert-warning' },
-						'Please enter a name.'
-					);
-				} else if (this.state.inputValue.length > 16) {
-					return _react2.default.createElement(
-						'div',
-						{ className: 'alert alert-warning' },
-						'Too many characters. Please shorten input.'
-					);
-				}
 			}
 		}, {
 			key: 'render',
@@ -29190,8 +29191,8 @@
 						handleSubmit: this.handleSubmit,
 						handleChange: this.handleChange,
 						inputValue: this.state.inputValue,
-						inputIsValid: this.state.inputIsValid,
-						showWarning: this.showWarning
+						inputIsInvalid: this.state.inputIsInvalid,
+						warningText: this.state.warningText
 					})
 				);
 			}

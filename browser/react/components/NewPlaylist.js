@@ -7,8 +7,7 @@ return (
 	  <form className="form-horizontal" onSubmit={props.handleSubmit}>
 	    <fieldset>
 	      <legend>New Playlist</legend>
-	      {console.log(props)}
-	      {props.showWarning}
+	      {props.inputIsInvalid ? <div className="alert alert-warning">{props.warningText}</div> : null}
 	      <div className="form-group">
 	        <label className="col-xs-2 control-label">Name</label>
 	        <div className="col-xs-10">
@@ -17,7 +16,7 @@ return (
 	      </div>
 	      <div className="form-group">
 	        <div className="col-xs-10 col-xs-offset-2">
-	          <button disabled={props.inputIsValid} type="submit" className="btn btn-success">Create Playlist</button>
+	          <button disabled={props.inputIsInvalid} type="submit" className="btn btn-success">Create Playlist</button>
 	        </div>
 	      </div>
 

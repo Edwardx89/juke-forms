@@ -8,61 +8,64 @@ class Playlists extends React.Component {
 		super(props);
 		this.state = {
 			inputValue: '',
-			inputIsValid: true,
-			showWarning: ''
+			inputIsInvalid: true,
+			warningText: '',
 		};
 	    this.handleChange = this.handleChange.bind(this);
 	    this.handleSubmit = this.handleSubmit.bind(this);
 	    this.validate = this.validate.bind(this);
-	    this.warning = this.warning.bind(this);
+	    this.warningText = this.warningText.bind(this);
 	}
 
-	validate () {
-		if (!this.state.inputValue || this.state.inputValue.length > 16) {
+	validate (value) {
+		console.log(value)
+		if (value.length > 16 ||  value === "" || value.length === 0) {
 			return true;
 		} else {
 			return false;
 		}
 	};
 
+	warningText (value) {
+		if(this.validate(value)){
+			if (value.length === 0|| value.length === undefined) {
+				return "Please enter a name.";
+			} else {
+				return 'Too many characters. Please shorten input.';
+			}
+		}
+	}
+
 	handleChange (evt) {
 		const value = evt.target.value;
+		const validate = this.validate(value);
+		const warningText = this.warningText(value)
 		this.setState({
 		  inputValue: value,
-		  inputIsValid: this.validate(),
-		  showWarning: this.warning()
+			inputIsInvalid: validate,
+		  warningText: warningText,
 		});
 	}
 
 	handleSubmit (evt) {
 		this.setState({
 			inputValue: '',
-			inputIsValid: true
+			inputIsInvalid: true
 	});
 		evt.preventDefault();
 	}
 
-	warning () {
-		if (!this.state.inputValue) {
-			return (<div className="alert alert-warning">
-	      		Please enter a name.
-	      		</div>)
-		} else if (this.state.inputValue.length > 16) {
-			return (<div className="alert alert-warning">
-	      		Too many characters. Please shorten input.
-	      		</div>)
-		}
-	}
+
 
 	render() {
 	  return (
 	    <div>
-	    	<NewPlaylist 
+	    	<NewPlaylist
 	    	handleSubmit={this.handleSubmit}
 	    	handleChange={this.handleChange}
 	    	inputValue={this.state.inputValue}
-	    	inputIsValid={this.state.inputIsValid}
-	    	showWarning={this.showWarning}
+	    	inputIsInvalid={this.state.inputIsInvalid}
+	    	warningText={this.state.warningText}
 	    	/>
 	    </div>
 	  )
