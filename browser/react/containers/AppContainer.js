@@ -125,7 +125,7 @@ export default class AppContainer extends Component {
   }
 
   render () {
-
+//object.assign ~ the first arguments is something that we will mutate. Therefore we sent in an empty object so that we do not mutuate any of our variables.
     const props = Object.assign({}, this.state, {
       toggleOne: this.toggleOne,
       toggle: this.toggle,
